@@ -46,11 +46,7 @@ Route::post('/recruitment-candidates', [RecruitmentCandidatesController::class, 
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/testing', function () {
-    return json_encode([
-        "hello" => "world"
-    ]);
-});
+
 
 
 Route::middleware('check.access')->group(function () {

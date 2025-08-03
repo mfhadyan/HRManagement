@@ -4,7 +4,7 @@
 </a>
 <ul class="collapse list-unstyled" id="userSubmenu">
     <li class="nav-item">
-        <a href={{ route('profile') }} class="nav-link">Profile</a>
+        <a href="{{ route('profile') }}" class="nav-link">Profile</a>
     </li>
     <li>
         <a class="dropdown-item" href="{{ route('logout') }}"

@@ -24,17 +24,17 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/custom-theme.css') }}" rel="stylesheet">
 
     @yield('head')
 </head>
 
 <body>
     <div id="app">
-        @yield(section: 'nav')
-{{-- Ini baru ditambahin --}}
+        @yield('nav')
 
         <main class="py-4">
-            @yield(section: 'content')
+            @yield('content')
         </main>
 
     </div>

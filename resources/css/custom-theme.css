@@ -1,0 +1,269 @@
+/* Custom Theme Colors */
+:root {
+    --primary-color: #1D230D;
+    --secondary-color: #FEFAE0;
+    --accent-color: #671A00;
+    --primary-dark: #141a09;
+    --secondary-light: #fefdf5;
+    --accent-light: #8a2e00;
+}
+
+/* Font Imports */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Custom Font Face */
+@font-face {
+    font-family: 'Vintage';
+    src: url('../fonts/vintage.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* Typography */
+body {
+    font-family: 'Vintage', 'Inter', 'Nunito', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Vintage', 'Poppins', 'Inter', sans-serif;
+    color: var(--primary-color);
+}
+
+/* Sidebar Styling */
+#sidebar {
+    background: var(--primary-color) !important;
+    color: var(--secondary-color) !important;
+}
+
+#sidebar .sidebar-header {
+    background: var(--primary-dark) !important;
+}
+
+#sidebar .sidebar-header a,
+#sidebar .sidebar-header h3 {
+    color: var(--secondary-color) !important;
+}
+
+#sidebar .nav-active {
+    background: var(--primary-dark) !important;
+}
+
+#sidebar ul li a {
+    color: var(--secondary-color) !important;
+}
+
+#sidebar ul li a:hover {
+    color: var(--primary-color) !important;
+    background: var(--secondary-color) !important;
+}
+
+#sidebar ul li .active > a,
+#sidebar a[aria-expanded="true"] {
+    color: var(--primary-color) !important;
+    background: var(--secondary-color) !important;
+}
+
+#sidebar ul ul a {
+    background: var(--primary-dark) !important;
+}
+
+/* Toggle Button */
+.toggleSidebarButton {
+    background: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.toggleSidebarButton:hover {
+    background: var(--accent-color) !important;
+    border-color: var(--accent-color) !important;
+}
+
+/* Navbar toggler icon */
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(254, 250, 224, 1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+.btn-secondary:hover {
+    background-color: var(--secondary-light) !important;
+    border-color: var(--secondary-light) !important;
+    color: var(--primary-color) !important;
+}
+
+.btn-accent {
+    background-color: var(--accent-color) !important;
+    border-color: var(--accent-color) !important;
+    color: var(--secondary-color) !important;
+}
+
+.btn-accent:hover {
+    background-color: var(--accent-light) !important;
+    border-color: var(--accent-light) !important;
+    color: var(--secondary-color) !important;
+}
+
+/* Cards */
+.card {
+    border-color: rgba(29, 35, 13, 0.2) !important;
+}
+
+.card-header {
+    background-color: rgba(29, 35, 13, 0.1) !important;
+    border-bottom-color: rgba(29, 35, 13, 0.2) !important;
+}
+
+/* Tables */
+.table thead th {
+    background-color: rgba(29, 35, 13, 0.1) !important;
+    border-bottom-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+/* Forms */
+.form-control:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.2rem rgba(29, 35, 13, 0.25) !important;
+}
+
+/* Alerts */
+.alert-primary {
+    background-color: rgba(29, 35, 13, 0.1) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+.alert-secondary {
+    background-color: rgba(254, 250, 224, 0.1) !important;
+    border-color: var(--secondary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+.alert-accent {
+    background-color: rgba(103, 26, 0, 0.1) !important;
+    border-color: var(--accent-color) !important;
+    color: var(--accent-color) !important;
+}
+
+/* Text Colors */
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.text-secondary {
+    color: var(--secondary-color) !important;
+}
+
+.text-accent {
+    color: var(--accent-color) !important;
+}
+
+/* Background Colors */
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.bg-secondary {
+    background-color: var(--secondary-color) !important;
+}
+
+.bg-accent {
+    background-color: var(--accent-color) !important;
+}
+
+/* Line separator */
+.line {
+    border-bottom: var(--primary-color) solid 3px !important;
+}
+
+/* Navigation links */
+.navbar-nav .nav-link {
+    color: var(--primary-color) !important;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--accent-color) !important;
+}
+
+/* Dropdown menus */
+.dropdown-menu {
+    border-color: var(--primary-color) !important;
+}
+
+.dropdown-item:hover {
+    background-color: rgba(29, 35, 13, 0.1) !important;
+}
+
+/* Pagination */
+.page-link {
+    color: var(--primary-color) !important;
+}
+
+.page-item.active .page-link {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.page-link:hover {
+    color: var(--accent-color) !important;
+}
+
+/* Badges */
+.badge-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.badge-secondary {
+    background-color: var(--secondary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+.badge-accent {
+    background-color: var(--accent-color) !important;
+    color: var(--secondary-color) !important;
+}
+
+/* Profile Picture Styling */
+.profile-picture {
+    width: 120px !important;
+    height: 120px !important;
+    object-fit: cover !important;
+    border: 3px solid var(--secondary-color) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.profile-picture-container {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 20px 0 !important;
+}
+
+/* Sidebar Profile Section */
+#sidebar .profile-section {
+    padding: 20px 0 !important;
+    border-bottom: 1px solid rgba(254, 250, 224, 0.2) !important;
+}
+
+#sidebar .profile-section h3 {
+    color: var(--secondary-color) !important;
+    margin-top: 10px !important;
+    font-size: 1.1rem !important;
+} 

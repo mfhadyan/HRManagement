@@ -42,7 +42,7 @@ class UserFactory extends Factory
                 'name' => 'Administrator',
                 'email' => 'admin@gmail.com',
                 // 'password' => '$2y$10$.l6nAxxUdU2gayAYkQW9T.6d/35KCHr.eX3qdN9OrVt5xjX/Skwwu',
-                'password' => hash('', 'admin'),
+                'password' => bcrypt('admin'),
                 'role_id' => function () {
                     return Role::factory()->admin()->create()->id;
                 }
@@ -57,7 +57,7 @@ class UserFactory extends Factory
                 'name' => 'User',
                 'email' => 'user@gmail.com',
                 // 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
-                'password' => hash('', 'user'),
+                'password' => bcrypt('user'),
                 'role_id' => function () {
                     return Role::factory()->user()->create()->id;
                 }

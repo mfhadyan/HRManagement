@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
-            {{ config('app.name', 'Laravel') }}
+            Warkop Laris Manis
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
@@ -17,9 +17,7 @@
                 <li class="nav-item">
                     <a href="{{ url('/#recruitments') }}" class="nav-link">Recruitments</a>
                 </li>
-                <li class="nav-item">
-                    <a href="{{ url('/testing') }}" class="nav-link">Testing</a>
-                </li>
+
 
             </ul>
 

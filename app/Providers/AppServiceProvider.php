@@ -32,7 +32,12 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('*', function ($view) {
             if (auth()->check()) {
-                $accesses = resolve(Access::class)->get(true);
+                $accesses = Access::where('role_id', auth()->user()->role_id)
+                    ->with('menu')
+                    ->whereHas('menu', function($query) {
+                        $query->where('is_active', true);
+                    })
+                    ->get();
                 return $view->with('accesses', $accesses);
             }
         });

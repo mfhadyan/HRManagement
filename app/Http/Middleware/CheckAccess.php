@@ -35,13 +35,17 @@ class CheckAccess
         }
 
 
-        $menuId = Menu::whereName($name)->first()->id;
-        $accessType = Access::where([
-            ["menu_id",'=', $menuId],
-            ["role_id",'=', auth()->user()->role_id],
-        ])->first()->status;
+        $menu = Menu::whereName($name)->first();
+        if (!$menu) {
+            return redirect()->route('dashboard');
+        }
 
-        if($accessType < 1) {
+        $access = Access::where([
+            ["menu_id",'=', $menu->id],
+            ["role_id",'=', auth()->user()->role_id],
+        ])->first();
+
+        if (!$access || $access->status < 1) {
             return redirect()->route('dashboard');
         }
 

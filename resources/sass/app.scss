@@ -1,5 +1,7 @@
 // Fonts
 @import url("https://fonts.googleapis.com/css?family=Nunito");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 // Variables
 @import "variables";
@@ -12,8 +14,6 @@
 @import "~@fortawesome/fontawesome-free/scss/regular";
 @import "~@fortawesome/fontawesome-free/scss/solid";
 @import "~@fortawesome/fontawesome-free/scss/fontawesome";
-
-$primary: #72adff;
 
 html {
     scroll-behavior: smooth;
@@ -45,12 +45,12 @@ html {
             #sidebar {
                 min-width: 300px;
                 max-width: 300px;
-                background: #7386d5;
-                color: white;
+                background: $primary;
+                color: $secondary;
                 transition: all 0.3s;
 
                 .nav-active {
-                    background: #6577bd;
+                    background: darken($primary, 10%);
                 }
 
                 i {
@@ -59,17 +59,17 @@ html {
 
                 .sidebar-header {
                     padding: 20px;
-                    background: #6d7fcc;
+                    background: darken($primary, 5%);
                 }
 
                 ul .components {
                     padding: 20px 0;
-                    border-bottom: 1px solid #47748b;
+                    border-bottom: 1px solid rgba($secondary, 0.2);
                 }
 
                 ul {
                     p {
-                        color: white;
+                        color: $secondary;
                         padding: 10px;
                     }
 
@@ -78,20 +78,20 @@ html {
                             padding: 10px;
                             font-size: 1.1em;
                             display: block;
-                            color: white;
+                            color: $secondary;
                         }
 
                         a:hover {
-                            color: #7385d5;
-                            background: white;
+                            color: $primary;
+                            background: $secondary;
                         }
                     }
                 }
 
                 ul li .active > a,
                 a[aria-expanded="true"] {
-                    color: #fff;
-                    background: #6d7fcc;
+                    color: $primary;
+                    background: $secondary;
                 }
             }
         }
@@ -115,7 +115,7 @@ html {
         ul ul a {
             font-size: 0.9em !important;
             padding-left: 30px !important;
-            background: #6d7fcc;
+            background: darken($primary, 5%);
         }
 
         .content {
@@ -126,17 +126,126 @@ html {
         }
 
         .toggleSidebarButton {
-            background: #7385d5 !important;
+            background: $primary !important;
             transition: all 0.3s;
         }
 
         .toggleSidebarButton:hover {
-            background: #72adff !important;
+            background: $accent !important;
         }
 
         .scrollable {
             overflow-y: scroll;
             max-height: 400px;
+        }
+
+        // Custom button styles
+        .btn-primary {
+            background-color: $primary;
+            border-color: $primary;
+            
+            &:hover {
+                background-color: darken($primary, 10%);
+                border-color: darken($primary, 10%);
+            }
+        }
+
+        .btn-secondary {
+            background-color: $secondary;
+            border-color: $secondary;
+            color: $primary;
+            
+            &:hover {
+                background-color: darken($secondary, 10%);
+                border-color: darken($secondary, 10%);
+                color: $primary;
+            }
+        }
+
+        .btn-accent {
+            background-color: $accent;
+            border-color: $accent;
+            color: $secondary;
+            
+            &:hover {
+                background-color: darken($accent, 10%);
+                border-color: darken($accent, 10%);
+                color: $secondary;
+            }
+        }
+
+        // Card styling
+        .card {
+            border-color: rgba($primary, 0.2);
+            
+            .card-header {
+                background-color: rgba($primary, 0.1);
+                border-bottom-color: rgba($primary, 0.2);
+            }
+        }
+
+        // Table styling
+        .table {
+            thead th {
+                background-color: rgba($primary, 0.1);
+                border-bottom-color: $primary;
+                color: $primary;
+            }
+        }
+
+        // Form styling
+        .form-control:focus {
+            border-color: $primary;
+            box-shadow: 0 0 0 0.2rem rgba($primary, 0.25);
+        }
+
+        // Alert styling
+        .alert-primary {
+            background-color: rgba($primary, 0.1);
+            border-color: $primary;
+            color: $primary;
+        }
+
+        .alert-secondary {
+            background-color: rgba($secondary, 0.1);
+            border-color: $secondary;
+            color: $primary;
+        }
+
+        .alert-accent {
+            background-color: rgba($accent, 0.1);
+            border-color: $accent;
+            color: $accent;
+        }
+
+        // Typography
+        h1, h2, h3, h4, h5, h6 {
+            font-family: $font-family-heading;
+            color: $primary;
+        }
+
+        .text-primary {
+            color: $primary !important;
+        }
+
+        .text-secondary {
+            color: $secondary !important;
+        }
+
+        .text-accent {
+            color: $accent !important;
+        }
+
+        .bg-primary {
+            background-color: $primary !important;
+        }
+
+        .bg-secondary {
+            background-color: $secondary !important;
+        }
+
+        .bg-accent {
+            background-color: $accent !important;
         }
     }
 }

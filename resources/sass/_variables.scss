@@ -2,11 +2,17 @@
 $body-bg: #f8fafc;
 
 // Typography
-$font-family-sans-serif: 'Nunito', sans-serif;
+$font-family-sans-serif: 'Vintage', 'Inter', 'Nunito', sans-serif;
+$font-family-heading: 'Vintage', 'Poppins', 'Inter', sans-serif;
 $font-size-base: 0.9rem;
 $line-height-base: 1.6;
 
 // Colors
+$primary: #1D230D;
+$secondary: #FEFAE0;
+$accent: #671A00;
+
+// Legacy colors (keeping for compatibility)
 $blue: #3490dc;
 $indigo: #6574cd;
 $purple: #9561e2;
