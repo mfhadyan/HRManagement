@@ -16,8 +16,8 @@ class AttendancesController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');  
-        
+        $this->middleware('auth');
+
         $this->attendances = resolve(Attendance::class);
 
         $this->attendanceTimes = resolve(AttendanceTime::class)->get();
@@ -56,46 +56,47 @@ class AttendancesController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->sick);
         $inId = $this->getId($this->attendanceTimes, "IN");
         $outId = $this->getId($this->attendanceTimes, "OUT");
-        
+
         $now = Carbon::now('Asia/Jakarta');
-        $checkInTime = Carbon::createFromTime(8,0,0,'Asia/Jakarta');
-        $checkOutTime = Carbon::createFromTime(16,0,0,'Asia/Jakarta');
+        $checkInTime = Carbon::createFromTime(0, 0, 15, 'Asia/Jakarta');
+        $checkOutTime = Carbon::createFromTime(0, 0, 15, 'Asia/Jakarta');
 
         $type = "";
         $time = "";
 
-        if($request->sick == 1) {
+        if ($request->sick == "1") {
             $type = "SICK";
             $time = "OTHER";
-        } else { 
+        } else {
             $checkForAttendance = Attendance::whereBetween('created_at', [Carbon::today('Asia/Jakarta'), Carbon::tomorrow('Asia/Jakarta')])
-                                                ->where('employee_id', auth()->user()->employee->id)
-                                                ->whereIn('attendance_time_id', [$inId, $outId])
-                                                ->first();
-            
+                ->where('employee_id', auth()->user()->employee->id)
+                ->whereIn('attendance_time_id', [$inId, $outId])
+                ->first();
+
             if ($checkForAttendance === null) {
                 $time = "IN";
 
-                if($now > $checkInTime) {
+                if ($now > $checkInTime) {
                     return redirect()->route('attendances')->with('status', 'Please wait for checkin time.');
                 }
 
-                if($now <= $checkInTime) {
+                if ($now <= $checkInTime) {
                     $type = "ONTIME";
                 } else {
                     $type = "LATE";
                 }
             } else if ($checkForAttendance->attendance_time_id !== $inId || $checkForAttendance->attendance_time_id !== $outId) {
-                if($checkForAttendance->attendance_time_id == $inId) {
+                if ($checkForAttendance->attendance_time_id == $inId) {
                     $time = "OUT";
 
-                    if($now < $checkOutTime) {
+                    if ($now < $checkOutTime) {
                         return redirect()->route('attendances')->with('status', 'Please wait for checkout time.');
                     }
 
-                    if($now == $checkOutTime) {
+                    if ($now == $checkOutTime) {
                         $type = "ONTIME";
                     } else {
                         $type = "OVERTIME";
@@ -103,7 +104,7 @@ class AttendancesController extends Controller
                 } else {
                     $time = "IN";
 
-                    if($now <= $checkInTime) {
+                    if ($now <= $checkInTime) {
                         $type = "ONTIME";
                     } else {
                         $type = "LATE";
@@ -151,10 +152,7 @@ class AttendancesController extends Controller
      * @param  \App\Models\Attendance  $attendance
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Attendance $attendance)
-    {
-
-    }
+    public function update(Request $request, Attendance $attendance) {}
 
     /**
      * Remove the specified resource from storage.
@@ -167,17 +165,16 @@ class AttendancesController extends Controller
         //
     }
 
-    public function print() 
+    public function print()
     {
         $attendances = Attendance::all();
         return view('pages.attendances_print', compact('attendances'));
     }
 
-    public function getId ($array, $type) 
+    public function getId($array, $type)
     {
         return $array->filter(function ($item) use ($type) {
             return $item->name == $type;
         })->first()->id;
     }
-    
 }

@@ -46,7 +46,14 @@ Route::post('/recruitment-candidates', [RecruitmentCandidatesController::class, 
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::middleware('check.access')->group(function() {
+Route::get('/testing', function () {
+    return json_encode([
+        "hello" => "world"
+    ]);
+});
+
+
+Route::middleware('check.access')->group(function () {
     Route::get('/employees-data', [EmployeesController::class, 'index'])->name('employees-data');
     Route::get('/employees-data/create', [EmployeesController::class, 'create'])->name('employees-data.create');
     Route::get('/employees-data/print', [EmployeesController::class, 'print'])->name('employees-data.print');
@@ -127,5 +134,5 @@ Route::middleware('check.access')->group(function() {
     Route::put('/roles/{role}', [RolesController::class, 'update'])->name('roles.update');
     Route::delete('/roles/{role}', [RolesController::class, 'destroy'])->name('roles.destroy');
     Route::get('/profile', [ProfilesController::class, 'index'])->name('profile');
-    Route::put('/profile/{user}', [ProfilesController::class, 'update'])->name('profile.update');    
+    Route::put('/profile/{user}', [ProfilesController::class, 'update'])->name('profile.update');
 });

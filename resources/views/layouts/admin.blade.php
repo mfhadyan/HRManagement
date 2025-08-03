@@ -5,14 +5,14 @@
 @endsection
 
 @section('content')
-<div class="wrapper">
-    @include('components.sidebar')
-    <div class="content">
-        @include('components.togglesidebar')
+    <div class="wrapper">
+        @include('components.sidebar')
+        <div class="content">
+            @include('components.togglesidebar')
 
-        @yield('_content')
+            @yield('_content')
+        </div>
     </div>
-</div>
 
-@yield('_script')
+    @yield('_script')
 @endsection
