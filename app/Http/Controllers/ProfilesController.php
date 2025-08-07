@@ -105,6 +105,6 @@ class ProfilesController extends Controller
 
         EmployeeDetail::whereEmployeeId($employee->id)->update($updateArray);
 
-        return redirect()->route('profile.index');
+        return redirect()->route('profile');
     }
 }

@@ -83,22 +83,25 @@
             </tr>
           </thead>
           <tbody>
-            @foreach ($reports as $report)
-            <tr>
-              <th scope="row">{{ $loop->iteration }}</th>
-              <td>{{ $report->transaction_id }}</td>
-              <td>{{ $report->product_name }}</td>
-              <td>{{ $report->quantity }}</td>
-              <td>Rp {{ $report->formatted_unit_price }}</td>
-              <td>Rp {{ $report->total_sales }}</td>
-              <td>
-                <span class="badge badge-{{ $report->payment_method == 'Cash' ? 'success' : 'primary' }}">
-                  {{ $report->payment_method }}
-                </span>
-              </td>
-              <td>{{ $report->cashier->name }}</td>
-              <td>{{ $report->transaction_time }}</td>
-            </tr>
+            @php $rowNumber = 1; @endphp
+            @foreach ($reports as $transaction)
+              @foreach ($transaction->transactionDetails as $detail)
+              <tr>
+                <th scope="row">{{ $rowNumber++ }}</th>
+                <td>{{ $transaction->transaction_id }}</td>
+                <td>{{ $detail->product->product_name }}</td>
+                <td>{{ $detail->quantity }}</td>
+                <td>Rp {{ number_format($detail->historical_unit_price, 2) }}</td>
+                <td>Rp {{ number_format($detail->total_amount, 2) }}</td>
+                <td>
+                  <span class="badge badge-{{ $transaction->paymentMethod->payment_method_name == 'Cash' ? 'success' : 'primary' }}">
+                    {{ $transaction->paymentMethod->payment_method_name }}
+                  </span>
+                </td>
+                <td>{{ $transaction->cashier->name }}</td>
+                <td>{{ $transaction->transaction_time }}</td>
+              </tr>
+              @endforeach
             @endforeach
           </tbody>
         </table>
