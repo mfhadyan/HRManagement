@@ -2,11 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Announcement;
 use App\Models\Employee;
-use App\Models\EmployeeDetail;
-use App\Models\EmployeeLeave;
-use App\Models\Recruitment;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -19,17 +15,43 @@ class EmployeeSeeder extends Seeder
      */
     public function run()
     {
-        $user = User::factory()->administrator()->create();
-        $employee = Employee::factory()->create(['user_id' => $user->id, 'name' => $user->name]);
-        EmployeeDetail::factory()->create(['employee_id' => $employee->id, 'name' => $employee->name, 'email' => $user->email]);
-        EmployeeLeave::factory()->create(['employee_id' => $employee->id]);
-        
-        Announcement::factory(10)->create(['created_by' => $employee->id]);
-        Recruitment::factory(10)->create(['position_id' => $employee->position_id]);
+        $employees = [
+            [
+                'name' => 'John Doe',
+                'start_of_contract' => '2021-01-01',
+                'end_of_contract' => '2025-12-31',
+                'department_id' => 1,
+                'position_id' => 1,
+                'is_active' => true,
+            ],
+            [
+                'name' => 'Jane Smith',
+                'start_of_contract' => '2021-02-01',
+                'end_of_contract' => '2025-12-31',
+                'department_id' => 2,
+                'position_id' => 2,
+                'is_active' => true,
+            ],
+        ];
 
-        $user = User::factory()->user()->create();
-        $employee = Employee::factory()->create(['user_id' => $user->id, 'name' => $user->name]);
-        EmployeeDetail::factory()->create(['employee_id' => $employee->id, 'name' => $employee->name, 'email' => $user->email]);
-        EmployeeLeave::factory()->create(['employee_id' => $employee->id]);
+        foreach ($employees as $employeeData) {
+            // Create user first
+            $user = User::create([
+                'name' => $employeeData['name'],
+                'email' => strtolower(str_replace(' ', '.', $employeeData['name'])) . '@example.com',
+                'password' => bcrypt('password'),
+            ]);
+            
+            // Create employee with user_id
+            $employee = Employee::create([
+                'user_id' => $user->id,
+                'name' => $employeeData['name'],
+                'start_of_contract' => $employeeData['start_of_contract'],
+                'end_of_contract' => $employeeData['end_of_contract'],
+                'department_id' => $employeeData['department_id'],
+                'position_id' => $employeeData['position_id'],
+                'is_active' => $employeeData['is_active'],
+            ]);
+        }
     }
 }

@@ -1,134 +1,131 @@
 @extends('layouts.admin', ['accesses' => $accesses, 'active' => 'dashboard'])
 
 @section('_content')
-    <div class="container-fluid mt-2 px-4">
-        <div class="row">
-            <div class="col-12">
-                <h4 class="font-weight-bold">Dashboard</h4>
-                <hr>
-            </div>
-        </div>
-
-        @if (!$checkForAttendance)
-            <div class="alert alert-warning">
-                <h5 class="font-weight-bold">Don't forget to check in / out !</h5>
-            </div>
-        @endif
-
-        @if (auth()->user()->isAdmin())
-            <div class="row">
-                <div class="col-sm-12 col-lg-6 mb-3">
-                    <div class="bg-light text-dark d-flex flex-column justify-content-center align-items-center py-5 card">
-                        <h4>Total Employees</h4>
-                        <h1>{{ $employeesCount }}</h1>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-lg-6 mb-3">
-                    <div class="bg-light text-dark d-flex flex-column justify-content-center align-items-center py-5 card">
-                        <h4>Job Applicants</h4>
-                        <h1>{{ $recruitmentCandidatesCount }}</h1>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-12 mb-3">
-                    <div class="bg-light text-dark card p-3 scrollable">
-                        <h4 class="font-weight-bold">Contract ends soon</h4>
-                        <table class="table table-light table-striped table-hover table-bordered text-center">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="table-dark">#</th>
-                                    <th scope="col" class="table-dark">Name</th>
-                                    <th scope="col" class="table-dark">Contract ends on</th>
-                                    <th scope="col" class="table-dark">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($endingEmployees as $employee)
-                                    <tr>
-                                        <th scope="row">{{ $loop->iteration + $endingEmployees->firstItem() - 1 }}</th>
-                                        <td>{{ $employee->name }}</td>
-                                        <td>{{ $employee->end_of_contract }}</td>
-                                        <td><a href="{{ route('employees-data.edit', ['employee' => $employee->id]) }}"
-                                                class="btn btn-outline-dark">Renew</a></td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-
-                        {{ $endingEmployees->links() }}
-                    </div>
-                </div>
-            </div>
-            {{-- 
-    <div class="row">
-      <div class="col-6 mb-3">
-        <div class="bg-light text-dark card p-3">
-          <h4>Last 2 Days Attendances</h4>
-          <div id="attendances-chart" style="height: 300px">
-          </div>
-        </div>
-      </div>
-      <div class="col-6 mb-3">
-        <div class="bg-light text-dark card p-3">
-          <h4>Monthly Performance</h4>
-          <div id="performance-chart" style="height: 300px">
-          </div>
-        </div>
-      </div>
-    </div> --}}
-        @endif
-
-        <div class="row">
-            <div class="col-12 mb-3">
-                <div class="bg-light text-dark p-3 card scrollable">
-                    <h3>Announcements</h3>
-                    <table class="table table-light table-striped table-hover table-bordered text-center">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="table-dark">#</th>
-                                <th scope="col" class="table-dark">Name</th>
-                                <th scope="col" class="table-dark">Created By</th>
-                                <th scope="col" class="table-dark">Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($announcements as $announcement)
-                                <tr>
-                                    <th scope="row">{{ $loop->iteration + $announcements->firstItem() - 1 }}</th>
-                                    <td><a
-                                            href="{{ route('announcements.show', ['announcement' => $announcement->id]) }}">{{ $announcement->title }}</a>
-                                    </td>
-                                    <td>{{ $announcement->creator->name }}</td>
-                                    <td>{{ $announcement->created_at }}</td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-
-                    {{ $announcements->links() }}
-                </div>
-            </div>
-        </div>
+<div class="container-fluid mt-2 px-4">
+  <div class="row">
+    <div class="col-12">
+        <h4 class="font-weight-bold">Dashboard</h4>
+        <hr>
     </div>
-@endsection
+  </div>
 
-@section('script')
-    <!-- Charting library -->
-    <script src="https://unpkg.com/echarts/dist/echarts.min.js"></script>
-    <!-- Chartisan -->
-    <script src="https://unpkg.com/@chartisan/echarts/dist/chartisan_echarts.js"></script>
-    <!-- Your application script -->
-    <script>
-        const attendancesChart = new Chartisan({
-            el: '#attendances-chart',
-            url: "@chart('attendances_chart')",
-        });
+  <div class="row">
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                Employees</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $employeesCount }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-users fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        const performanceChart = new Chartisan({
-            el: '#performance-chart',
-            url: "@chart('performance_chart')",
-        });
-    </script>
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                Recruitment Candidates</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $recruitmentCandidatesCount }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-user-plus fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-warning shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                Ending Contracts</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $endingEmployees->count() }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-calendar fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                Active Employees</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $checkForAttendance->count() }}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-user-check fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Recent Transactions</h6>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Transaction ID</th>
+                  <th>Product</th>
+                  <th>Cashier</th>
+                  <th>Total Sales</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach ($reports as $report)
+                <tr>
+                  <th scope="row">{{ $loop->iteration }}</th>
+                  <td>
+                    <a href="{{ route('reports.show', $report) }}">{{ $report->transaction_id }}</a>
+                  </td>
+                  <td>
+                    @foreach($report->transactionDetails as $detail)
+                      <span class="badge badge-info">
+                        {{ $detail->product->product_name ?? 'N/A' }} ({{ $detail->quantity }})
+                      </span>
+                    @endforeach
+                  </td>
+                  <td>{{ $report->cashier->name ?? 'N/A' }}</td>
+                  <td>Rp {{ number_format($report->total_sales, 2) }}</td>
+                  <td>{{ $report->date }}</td>
+                </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+          <div class="text-center mt-3">
+            <a href="{{ route('reports') }}" class="btn btn-primary">View All Reports</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection

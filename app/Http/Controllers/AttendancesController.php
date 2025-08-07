@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Attendance;
 use App\Models\AttendanceTime;
 use App\Models\AttendanceType;
+use App\Models\Log;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -19,150 +20,115 @@ class AttendancesController extends Controller
         $this->middleware('auth');
 
         $this->attendances = resolve(Attendance::class);
-
         $this->attendanceTimes = resolve(AttendanceTime::class)->get();
         $this->attendanceTypes = resolve(AttendanceType::class)->get();
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $attendances = $this->attendances->paginate();
-
-        $alreadyCheckedInAndOut = false;
-
         return view('pages.attendances', compact('attendances'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        // dd($request->sick);
         $inId = $this->getId($this->attendanceTimes, "IN");
         $outId = $this->getId($this->attendanceTimes, "OUT");
 
         $now = Carbon::now('Asia/Jakarta');
-        $checkInTime = Carbon::createFromTime(0, 0, 15, 'Asia/Jakarta');
-        $checkOutTime = Carbon::createFromTime(0, 0, 15, 'Asia/Jakarta');
+        $checkInTime = Carbon::createFromTime(7, 0, 0, 'Asia/Jakarta');
+        $checkOutTime = Carbon::createFromTime(17, 0, 0, 'Asia/Jakarta');
 
         $type = "";
         $time = "";
+        $logStatus = "";
+        $logDetails = "";
 
+        // Sakit
         if ($request->sick == "1") {
             $type = "SICK";
             $time = "OTHER";
+            $logStatus = "sick";
+            $logDetails = "Employee marked as sick";
         } else {
-            $checkForAttendance = Attendance::whereBetween('created_at', [Carbon::today('Asia/Jakarta'), Carbon::tomorrow('Asia/Jakarta')])
+            // Cek apakah sudah absen hari ini
+            $checkForAttendance = Attendance::whereDate('created_at', Carbon::today('Asia/Jakarta'))
                 ->where('employee_id', auth()->user()->employee->id)
                 ->whereIn('attendance_time_id', [$inId, $outId])
-                ->first();
+                ->get();
 
-            if ($checkForAttendance === null) {
+            $hasCheckedIn = $checkForAttendance->where('attendance_time_id', $inId)->first();
+            $hasCheckedOut = $checkForAttendance->where('attendance_time_id', $outId)->first();
+
+            if (!$hasCheckedIn) {
+                // Proses Check-in
                 $time = "IN";
 
-                if ($now > $checkInTime) {
-                    return redirect()->route('attendances')->with('status', 'Please wait for checkin time.');
+                if ($now < $checkInTime) {
+                    return redirect()->route('attendances')->with('status', 'Belum waktunya check-in. Tunggu sampai jam 07:00.');
                 }
 
-                if ($now <= $checkInTime) {
-                    $type = "ONTIME";
-                } else {
-                    $type = "LATE";
+                // Toleransi keterlambatan 15 menit
+                $lateLimit = $checkInTime->copy()->addMinutes(15);
+                $type = $now <= $lateLimit ? "ONTIME" : "LATE";
+                $logStatus = "present";
+                $logDetails = "Check-in at " . $now->format('H:i:s') . " - Status: " . $type;
+            } elseif (!$hasCheckedOut) {
+                // Proses Check-out
+                $time = "OUT";
+
+                if ($now < $checkOutTime) {
+                    return redirect()->route('attendances')->with('status', 'Belum waktunya check-out. Tunggu sampai jam 17:00.');
                 }
-            } else if ($checkForAttendance->attendance_time_id !== $inId || $checkForAttendance->attendance_time_id !== $outId) {
-                if ($checkForAttendance->attendance_time_id == $inId) {
-                    $time = "OUT";
 
-                    if ($now < $checkOutTime) {
-                        return redirect()->route('attendances')->with('status', 'Please wait for checkout time.');
-                    }
-
-                    if ($now == $checkOutTime) {
-                        $type = "ONTIME";
-                    } else {
-                        $type = "OVERTIME";
-                    }
-                } else {
-                    $time = "IN";
-
-                    if ($now <= $checkInTime) {
-                        $type = "ONTIME";
-                    } else {
-                        $type = "LATE";
-                    }
-                }
+                // Toleransi lembur 30 menit
+                $overtimeStart = $checkOutTime->copy()->addMinutes(30);
+                $type = $now <= $overtimeStart ? "ONTIME" : "OVERTIME";
+                $logStatus = "present";
+                $logDetails = "Check-out at " . $now->format('H:i:s') . " - Status: " . $type;
+            } else {
+                return redirect()->route('attendances')->with('status', 'Anda sudah check-in dan check-out hari ini.');
             }
         }
 
-        $this->attendances->create([
+        $attendance = $this->attendances->create([
             'employee_id' => auth()->user()->employee->id,
             'attendance_time_id' => $this->getId($this->attendanceTimes, $time),
             'attendance_type_id' => $this->getId($this->attendanceTypes, $type),
             'message' => $request->input('message'),
         ]);
 
-        return back();
+        // Log the attendance event
+        Log::create([
+            'employee_id' => auth()->user()->employee->id,
+            'event_type' => 'attendance',
+            'status' => $logStatus,
+            'description' => auth()->user()->employee->name . " - " . ucfirst($logStatus) . " (" . $type . ")",
+            'details' => $logDetails
+        ]);
+
+        return redirect()->route('attendances')->with('status', 'Absensi berhasil disimpan.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Attendance  $attendance
-     * @return \Illuminate\Http\Response
-     */
     public function show(Attendance $attendance)
-    {
-        //
+    { /* optional */
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Attendance  $attendance
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Attendance $attendance)
-    {
-        //
+    { /* optional */
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Attendance  $attendance
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Attendance $attendance) {}
+    public function update(Request $request, Attendance $attendance)
+    { /* optional */
+    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Attendance  $attendance
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Attendance $attendance)
-    {
-        //
+    { /* optional */
     }
 
     public function print()
@@ -171,10 +137,8 @@ class AttendancesController extends Controller
         return view('pages.attendances_print', compact('attendances'));
     }
 
-    public function getId($array, $type)
+    public function getId($collection, $type)
     {
-        return $array->filter(function ($item) use ($type) {
-            return $item->name == $type;
-        })->first()->id;
+        return $collection->firstWhere('name', $type)?->id;
     }
 }

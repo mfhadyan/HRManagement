@@ -72,8 +72,13 @@ class EmployeeLeaveRequestsController extends Controller
             'message' => $request->input('message')
         ]);
         
+        // Log the leave request
         Log::create([
-            'description' => auth()->user()->employee->name . " created a leave request from '" . $request->input('from') . "' to '" . $request->input('to') . "'"
+            'employee_id' => $request->input('employee_id'),
+            'event_type' => 'leave',
+            'status' => 'requested',
+            'description' => auth()->user()->employee->name . " requested leave from " . $request->input('from') . " to " . $request->input('to'),
+            'details' => "Leave request for " . $diff . " days"
         ]);
 
         return redirect()->route('employees-leave-request')->with('status', 'Successfully created an employee leave request.');
@@ -131,8 +136,13 @@ class EmployeeLeaveRequestsController extends Controller
                 'message' => $request->input('message')
                 ]);
 
+            // Log the leave request update
             Log::create([
-                'description' => auth()->user()->employee->name . " updated a leave request's detail"
+                'employee_id' => $employeeLeaveRequest->employee_id,
+                'event_type' => 'leave',
+                'status' => 'updated',
+                'description' => auth()->user()->employee->name . " updated leave request",
+                'details' => "Updated leave request from " . $request->input('from') . " to " . $request->input('to')
             ]);
 
             return redirect()->route('employees-leave-request')->with('status', 'Successfully updated employee leave request.');
@@ -157,8 +167,13 @@ class EmployeeLeaveRequestsController extends Controller
 
             $employeeLeave->update(['used_leaves' => $employeeLeave->used_leaves + $diff]);
 
+            // Log the approved leave
             Log::create([
-                'description' => auth()->user()->employee->name . " approved ". $employeeLeaveRequest->employee->name  ."'s leave request from '" . $employeeLeaveRequest->from . "' to '" . $employeeLeaveRequest->to . "'"
+                'employee_id' => $employeeLeaveRequest->employee_id,
+                'event_type' => 'leave',
+                'status' => 'approved',
+                'description' => auth()->user()->employee->name . " approved " . $employeeLeaveRequest->employee->name . "'s leave request",
+                'details' => "Approved leave from " . $employeeLeaveRequest->from . " to " . $employeeLeaveRequest->to . " (" . $diff . " days)"
             ]);
         
             return redirect()->route('employees-leave-request')->with('status', 'Successfully accepted employee leave request.');
@@ -180,8 +195,13 @@ class EmployeeLeaveRequestsController extends Controller
                 'comment' => request()->input('comment')
             ]);
 
+        // Log the rejected leave
         Log::create([
-            'description' => auth()->user()->employee->name . " rejected ". $employeeLeaveRequest->employee->name  ."'s leave request from '" . $employeeLeaveRequest->from . "' to '" . $employeeLeaveRequest->to . "'"
+            'employee_id' => $employeeLeaveRequest->employee_id,
+            'event_type' => 'leave',
+            'status' => 'rejected',
+            'description' => auth()->user()->employee->name . " rejected " . $employeeLeaveRequest->employee->name . "'s leave request",
+            'details' => "Rejected leave from " . $employeeLeaveRequest->from . " to " . $employeeLeaveRequest->to
         ]);
         
         return redirect()->route('employees-leave-request')->with('status', 'Successfully rejected employee leave request.');   

@@ -1,6 +1,9 @@
 <?php
 
-use App\Http\Controllers\AnnouncementsController;
+use App\Http\Controllers\ReportsController;
+use App\Http\Controllers\TransactionsController;
+use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\PaymentMethodsController;
 use App\Http\Controllers\UsersController;
 use App\Http\Controllers\AttendancesController;
 use App\Http\Controllers\DashboardController;
@@ -38,8 +41,7 @@ Auth::routes([
 ]);
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome')->middleware('guest');
-Route::get('/welcome/announcements', [WelcomeController::class, 'announcements'])->name('welcome.announcements')->middleware('guest');
-Route::get('/welcome/announcements/{announcement}', [WelcomeController::class, 'announcementShow'])->name('welcome.announcements.show')->middleware('guest');
+
 Route::get('/welcome/recruitments', [WelcomeController::class, 'recruitments'])->name('welcome.recruitments')->middleware('guest');
 Route::get('/welcome/recruitments/{recruitment}', [WelcomeController::class, 'recruitmentShow'])->name('welcome.recruitments.show')->middleware('guest');
 Route::post('/recruitment-candidates', [RecruitmentCandidatesController::class, 'store'])->name('recruitment-candidates.store');
@@ -94,14 +96,36 @@ Route::middleware('check.access')->group(function () {
     Route::get('/attendances/print', [AttendancesController::class, 'print'])->name('attendances.print');
     Route::post('/attendances', [AttendancesController::class, 'store'])->name('attendances.store');
     Route::put('/attendances', [AttendancesController::class, 'update'])->name('attendances.update');
-    Route::get('/announcements', [AnnouncementsController::class, 'index'])->name('announcements');
-    Route::get('/announcements/create', [AnnouncementsController::class, 'create'])->name('announcements.create');
-    Route::get('/announcements/print', [AnnouncementsController::class, 'print'])->name('announcements.print');
-    Route::get('/announcements/{announcement}', [AnnouncementsController::class, 'show'])->name('announcements.show');
-    Route::get('/announcements/{announcement}/edit', [AnnouncementsController::class, 'edit'])->name('announcements.edit');
-    Route::post('/announcements', [AnnouncementsController::class, 'store'])->name('announcements.store');
-    Route::put('/announcements/{announcement}', [AnnouncementsController::class, 'update'])->name('announcements.update');
-    Route::delete('/announcements/{announcement}', [AnnouncementsController::class, 'destroy'])->name('announcements.destroy');
+    Route::get('/reports', [ReportsController::class, 'index'])->name('reports');
+    Route::get('/reports/create', [ReportsController::class, 'create'])->name('reports.create');
+    Route::get('/reports/print', [ReportsController::class, 'print'])->name('reports.print');
+    Route::get('/reports/daily-summary', [ReportsController::class, 'dailySummary'])->name('reports.daily-summary');
+    Route::get('/reports/{report}', [ReportsController::class, 'show'])->name('reports.show');
+    Route::get('/reports/{report}/edit', [ReportsController::class, 'edit'])->name('reports.edit');
+    Route::post('/reports', [ReportsController::class, 'store'])->name('reports.store');
+    Route::put('/reports/{report}', [ReportsController::class, 'update'])->name('reports.update');
+    Route::delete('/reports/{report}', [ReportsController::class, 'destroy'])->name('reports.destroy');
+    Route::get('/transactions', [TransactionsController::class, 'index'])->name('transactions');
+    Route::get('/transactions/create', [TransactionsController::class, 'create'])->name('transactions.create');
+    Route::get('/transactions/print', [TransactionsController::class, 'print'])->name('transactions.print');
+    Route::get('/transactions/summary', [TransactionsController::class, 'summary'])->name('transactions.summary');
+    Route::get('/transactions/{transaction}', [TransactionsController::class, 'show'])->name('transactions.show');
+    Route::get('/transactions/{transaction}/edit', [TransactionsController::class, 'edit'])->name('transactions.edit');
+    Route::post('/transactions', [TransactionsController::class, 'store'])->name('transactions.store');
+    Route::put('/transactions/{transaction}', [TransactionsController::class, 'update'])->name('transactions.update');
+    Route::delete('/transactions/{transaction}', [TransactionsController::class, 'destroy'])->name('transactions.destroy');
+    Route::get('/products', [ProductsController::class, 'index'])->name('products');
+    Route::get('/products/create', [ProductsController::class, 'create'])->name('products.create');
+    Route::get('/products/{product}/edit', [ProductsController::class, 'edit'])->name('products.edit');
+    Route::post('/products', [ProductsController::class, 'store'])->name('products.store');
+    Route::put('/products/{product}', [ProductsController::class, 'update'])->name('products.update');
+    Route::delete('/products/{product}', [ProductsController::class, 'destroy'])->name('products.destroy');
+    Route::get('/payment-methods', [PaymentMethodsController::class, 'index'])->name('payment-methods');
+    Route::get('/payment-methods/create', [PaymentMethodsController::class, 'create'])->name('payment-methods.create');
+    Route::get('/payment-methods/{paymentMethod}/edit', [PaymentMethodsController::class, 'edit'])->name('payment-methods.edit');
+    Route::post('/payment-methods', [PaymentMethodsController::class, 'store'])->name('payment-methods.store');
+    Route::put('/payment-methods/{paymentMethod}', [PaymentMethodsController::class, 'update'])->name('payment-methods.update');
+    Route::delete('/payment-methods/{paymentMethod}', [PaymentMethodsController::class, 'destroy'])->name('payment-methods.destroy');
     Route::get('/recruitments', [RecruitmentsController::class, 'index'])->name('recruitments');
     Route::get('/recruitments/create', [RecruitmentsController::class, 'create'])->name('recruitments.create');
     Route::get('/recruitments/print', [RecruitmentsController::class, 'print'])->name('recruitments.print');

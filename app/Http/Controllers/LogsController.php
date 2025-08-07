@@ -14,7 +14,10 @@ class LogsController extends Controller
      */
     public function index()
     {
-        $logs = Log::latest()->paginate(10);
+        $logs = Log::with('employee')
+            ->attendanceEvents()
+            ->latest()
+            ->paginate(10);
 
         return view('pages.logs', compact('logs'));
     }
@@ -87,7 +90,10 @@ class LogsController extends Controller
 
     public function print()
     {
-        $logs = Log::all();
+        $logs = Log::with('employee')
+            ->attendanceEvents()
+            ->latest()
+            ->get();
         return view('pages.logs_print', compact('logs'));
     }
 }

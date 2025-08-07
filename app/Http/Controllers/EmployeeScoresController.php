@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreEmployeeScoreRequest;
 use App\Models\Employee;
 use App\Models\EmployeeScore;
-use App\Models\Log;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -75,39 +74,6 @@ class EmployeeScoresController extends Controller
 
         $employeeName = Employee::whereId($request->input('employee_id'))->first()->name;
 
-        Log::create([
-            'description' => auth()->user()->employee->name . " created performance scores for employee named '" . $employeeName . "'"
-        ]);
-
-        return redirect()->route('employees-performance-score')->with('status', "Successfully added an employee's score");
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\EmployeeScore  $employeeScore
-     * @return \Illuminate\Http\Response
-     */
-    public function show(EmployeeScore $employeeScore)
-    {
-        $scores = $this->employeeScores->getEmployeeScoreDetail($employeeScore->group_id);
-
-        return view('pages.employees-performance-score_show', compact('employeeScore', 'scores'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\EmployeeScore  $employeeScore
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(EmployeeScore $employeeScore)
-    {
-        $data = $this->employeeScores->getDataToCreate();
-
-        $employees = $data["employees"]->filter(function($employee) {
-            return $employee->id !== auth()->user()->employee->id;
-        });
         
         $scoreCategories = $data["scoreCategories"];
 
@@ -139,48 +105,6 @@ class EmployeeScoresController extends Controller
 
         $employeeName = Employee::whereId($request->input('employee_id'))->first()->name;
 
-        Log::create([
-            'description' => auth()->user()->employee->name . " updated performance scores for employee named '" . $employeeName . "'"
-        ]);
-
-        return redirect()->route('employees-performance-score')->with('status', "Successfully updated employee's score");
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\EmployeeScore  $employeeScore
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(EmployeeScore $employeeScore)
-    {
-        EmployeeScore::where('group_id', $employeeScore->group_id)->delete();
-
-        $employeeName = Employee::whereId($employeeScore->employee_id)->first()->name;
-
-        Log::create([
-            'description' => auth()->user()->employee->name . " deleted performance scores for employee named '" . $employeeName . "'"
-        ]);
-
-        return redirect()->route('employees-performance-score')->with('status', "Successfully deleted employee's score");
-    }
-
-    public function print () {
-        $employeeScores = EmployeeScore::latest()->groupBy('group_id')->get();
-
-        foreach ($employeeScores as $score) {
-            $scoreDetail = $score->getEmployeeScoreDetail($score->group_id);
-
-            $total = 0;
-            foreach($scoreDetail as $scr) {
-                $total += $scr->score;
-            }
-
-            $total /= count($scoreDetail);
-
-            $score["score"] = $total;
-        }
-
-        return view('pages.employees-performance-score_print', compact('employeeScores'));
+        return redirect()->route('employees-performance-score');
     }
 }

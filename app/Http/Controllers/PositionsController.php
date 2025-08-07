@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePositionRequest;
-use App\Models\Log;
 use App\Models\Position;
 use Illuminate\Http\Request;
 
@@ -48,10 +47,6 @@ class PositionsController extends Controller
     {
         Position::create($request->validated());
 
-        Log::create([
-            'description' => auth()->user()->employee->name . " created a position named '" . $request->input('name') . "'"
-        ]);
-
         return redirect()->route('positions-data')->with('status', 'Successfully created a position.');
     }
 
@@ -88,10 +83,6 @@ class PositionsController extends Controller
     {
         Position::where('id', $position->id)->update($request->validated());
 
-        Log::create([
-            'description' => auth()->user()->employee->name . " updated a position's detail named '" . $position->name . "'"
-        ]);
-
         return redirect()->route('positions-data')->with('status', 'Successfully updated position.');
     }
 
@@ -104,10 +95,6 @@ class PositionsController extends Controller
     public function destroy(Position $position)
     {
         Position::where('id', $position->id)->delete();
-
-        Log::create([
-            'description' => auth()->user()->employee->name . " deleted a position named '" . $position->name . "'"
-        ]);
 
         return redirect()->route('positions-data')->with('status', 'Successfully deleted a position.');
     }

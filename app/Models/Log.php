@@ -12,8 +12,31 @@ class Log extends Model
 
     protected $guarded = [];
 
+    protected $fillable = [
+        'employee_id',
+        'event_type',
+        'status',
+        'description',
+        'details'
+    ];
+
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
+
     public function getCreatedAtAttribute($value)
     {
         return Carbon::parse($value)->format('d-m-Y H:i:s');
+    }
+
+    public function scopeAttendanceEvents($query)
+    {
+        return $query->whereIn('event_type', ['attendance', 'leave', 'absence']);
+    }
+
+    public function scopeByEmployee($query, $employeeId)
+    {
+        return $query->where('employee_id', $employeeId);
     }
 }
