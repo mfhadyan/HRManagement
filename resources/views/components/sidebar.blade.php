@@ -16,7 +16,7 @@
         </div>
         @foreach ($accesses as $access)
             @if ($access->status > 0)
-                @if ($access->menu->name == 'data')
+                @if (in_array($access->menu->name, ['data', 'accounts', 'performance']))
                     @if (auth()->user()->role_id == 1)
                         <li class="nav-item {{ $active == $access->menu->name ? 'nav-active' : '' }}">
                             @include('components.nav.' . $access->menu->name)

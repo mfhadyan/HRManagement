@@ -10,7 +10,7 @@
         <div class="row hero">
             <div class="col-8 offset-1 d-flex align-items-center">
                 <div>
-                    <h1 class="text-white font-weight-bold text-capitalize">Warkop LarisManis</h1>
+                    <h1 class="text-white font-weight-bold text-capitalize">Warkop Laris Manis</h1>
                     <h4 class="text-white">Semanis senyumnya!</h4>
                 </div>
             </div>

@@ -34,8 +34,8 @@ class CheckAccess
             $name = "score-category";
         }
 
-        // Check if user is trying to access data menu and is not an administrator
-        if ($name == "data" && auth()->user()->role_id != 1) {
+        // Check if user is trying to access restricted menus and is not an administrator
+        if (in_array($name, ['data', 'accounts', 'performance']) && auth()->user()->role_id != 1) {
             return redirect()->route('dashboard');
         }
 
