@@ -41,8 +41,8 @@ class AttendancesController extends Controller
         $outId = $this->getId($this->attendanceTimes, "OUT");
 
         $now = Carbon::now('Asia/Jakarta');
-        $checkInTime = Carbon::createFromTime(7, 0, 0, 'Asia/Jakarta');
-        $checkOutTime = Carbon::createFromTime(17, 0, 0, 'Asia/Jakarta');
+        $checkInTime = Carbon::createFromTime(17, 45, 0, 'Asia/Jakarta');
+        $checkOutTime = Carbon::createFromTime(19, 0, 0, 'Asia/Jakarta');
 
         $type = "";
         $time = "";
